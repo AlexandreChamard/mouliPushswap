@@ -5,11 +5,14 @@
 ** Login   <alexandre@epitech.net>
 **
 ** Started on  Wed Oct 18 22:57:25 2017 alexandre Chamard-bois
-** Last update Fri Oct 20 11:34:38 2017 alexandre Chamard-bois
+** Last update Fri Oct 20 16:12:19 2017 alexandre Chamard-bois
 */
 
 #ifndef MOULI_H_
 # define MOULI_H_
+
+# define MIN(x, y) ((x) < (y) ? (x) : (y))
+# define MAX(x, y) ((x) > (y) ? (x) : (y))
 
 typedef struct infos {
     int min; // -50.000
@@ -32,5 +35,8 @@ int 	exec_binary(char **av);
 
 /* ARG */
 list_t *pars_file(char const *file);
+
+/* GENERATION */
+char **malloc_ptr(infos_t *infos);
 
 #endif

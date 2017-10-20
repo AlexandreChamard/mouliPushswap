@@ -5,7 +5,7 @@
 ** Login   <alexandre@epitech.net>
 **
 ** Started on  Thu Oct 19 00:01:38 2017 alexandre Chamard-bois
-** Last update Fri Oct 20 11:29:45 2017 alexandre Chamard-bois
+** Last update Fri Oct 20 15:29:21 2017 alexandre Chamard-bois
 */
 
 #include <unistd.h>
@@ -14,7 +14,7 @@
 #include <sys/wait.h>
 #include <stdlib.h>
 
-void 	read_fd(int fd)
+static void 	read_fd(int fd)
 {
 	char buffer[100 + 1] = "";
     char *ptr;

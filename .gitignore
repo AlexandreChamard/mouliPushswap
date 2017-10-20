@@ -1,8 +1,12 @@
-Pushswap
+# temporary
 *.o
 *#
 *~
 
+# binary
 a.out
+mouliPushswap
 
+# file // folder
+Pushswap
 .clang_complete

@@ -5,7 +5,7 @@
 ** Login   <alexandre@epitech.net>
 **
 ** Started on  Thu Oct 19 22:00:31 2017 alexandre Chamard-bois
-** Last update Fri Oct 20 11:41:03 2017 alexandre Chamard-bois
+** Last update Fri Oct 20 15:29:52 2017 alexandre Chamard-bois
 */
 
 #include <string.h>
@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include "mouli.h"
 
-void trim(char *str) {
+static void trim(char *str) {
     size_t i = 0;
     size_t len = strlen(str);
 
@@ -27,7 +27,7 @@ void trim(char *str) {
         *str = 0;
         return ;
     }
-    for (int j = 0; j < len - i + 1; j++) {
+    for (unsigned int j = 0; j < len - i + 1; j++) {
         str[j] = str[i + j];
     }
     str[len - i + 1] = 0;
@@ -35,7 +35,7 @@ void trim(char *str) {
     str[i] = 0;
 }
 
-int get_args(FILE *fp, infos_t *infos)
+static int get_args(FILE *fp, infos_t *infos)
 {
     char *line = NULL;
     size_t len = 0;
@@ -57,7 +57,8 @@ int get_args(FILE *fp, infos_t *infos)
     return ((read <= 0));
 }
 
-list_t *new_serie(list_t *list, FILE *fp, infos_t *def_infos, char const *line)
+static list_t *new_serie(list_t *list, FILE *fp,
+                        infos_t *def_infos, char const *line)
 {
     infos_t     infos;
     list_t      *new_serie;
@@ -83,7 +84,7 @@ list_t *new_serie(list_t *list, FILE *fp, infos_t *def_infos, char const *line)
     return (list);
 }
 
-list_t *recup_series(FILE *fp, infos_t *default_infos)
+static list_t *recup_series(FILE *fp, infos_t *default_infos)
 {
     list_t  *list = NULL;
     char    *line = NULL;
@@ -110,11 +111,18 @@ list_t *pars_file(char const *file)
 {
     infos_t default_infos = {-50000, 49999, 0, 10, time(NULL)};
     list_t *series;
-    FILE    *fp; 
+    FILE    *fp;
 
     if (!(fp = fopen(file, "r"))) {
+        dprintf(2, "%s: File not found.\n", file);
         return (NULL);
     }
     series = recup_series(fp, &default_infos);
+    for (list_t *ptr = series; ptr; ptr = ptr->next) {
+        ptr->infos.min = MAX(-50000, ptr->infos.min);
+        ptr->infos.max = MIN(ptr->infos.max, 49999);
+        ptr->infos.nb_args = MIN(ptr->infos.nb_args, 100000);
+    }
+    fclose(fp);
     return (series);
 }

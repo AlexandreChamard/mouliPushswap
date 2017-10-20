@@ -12,11 +12,14 @@
 #max:       1000
 seed:       123456789
 
-serie: 10, 100 {
-    calls:   100
+serie: 1 {
+
 }
 
-serie: 500, 1000 {
-    calls: 40
-    min: 30
+serie: 2 {
+
+}
+
+serie: 100, 500, 1000 {
+
 }

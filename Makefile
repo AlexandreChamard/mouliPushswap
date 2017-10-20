@@ -13,9 +13,11 @@ CC		=	gcc
 CFLAGS		=	-W -Wall -Wextra -Werror -g
 CFLAGS		+=	-I./include
 
-SRC		=	src/randomGen.c		\
-			src/help.c  		\
-			src/execBinary.c  	\
+SRC		=	src/main.c			\
+			src/help.c			\
+			src/execBinary.c	\
+			src/arg.c			\
+			src/randomGen.c		\
 
 OBJ		=	$(SRC:.c=.o)
 

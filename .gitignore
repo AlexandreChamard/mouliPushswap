@@ -1,0 +1,6 @@
+Pushswap
+*.o
+*#
+*~
+
+a.out

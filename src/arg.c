@@ -5,7 +5,7 @@
 ** Login   <alexandre@epitech.net>
 **
 ** Started on  Thu Oct 19 22:00:31 2017 alexandre Chamard-bois
-** Last update Fri Oct 20 11:35:42 2017 alexandre Chamard-bois
+** Last update Fri Oct 20 11:41:03 2017 alexandre Chamard-bois
 */
 
 #include <string.h>
@@ -110,7 +110,7 @@ list_t *pars_file(char const *file)
 {
     infos_t default_infos = {-50000, 49999, 0, 10, time(NULL)};
     list_t *series;
-    FILE    *fp;
+    FILE    *fp; 
 
     if (!(fp = fopen(file, "r"))) {
         return (NULL);

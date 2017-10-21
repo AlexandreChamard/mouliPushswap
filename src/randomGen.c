@@ -5,7 +5,7 @@
 ** Login   <alexandre@epitech.net>
 **
 ** Started on  Thu Oct 19 15:09:54 2017 alexandre Chamard-bois
-** Last update Sat Oct 21 10:47:09 2017 alexandre Chamard-bois
+** Last update Sat Oct 21 11:11:07 2017 alexandre Chamard-bois
 */
 
 #include <stdlib.h>
@@ -14,7 +14,7 @@
 #include <string.h>
 #include "mouli.h"
 
-const int S_BINARY = 12;
+const int S_BIN = 12;
 const int S_NB = 7;
 
 void fill_tab(char **tab, infos_t *infos)
@@ -32,15 +32,15 @@ static inline void addressage(char **tab, char *string, int nb_ptr)
 {
 	tab[0] = string;
 	for (int i = 1; i < nb_ptr; i++) {
-		tab[i] = string + S_BINARY + (i - 1) * S_NB;
+		tab[i] = string + S_BIN + (i - 1) * S_NB;
 	}
 }
 
-/* malloc un ptr de la taille de NB_ARGS ptr + S_BINARY + NB_ARGS * S_NB */
+/* malloc un ptr de la taille de NB_ARGS ptr + S_BIN + NB_ARGS * S_NB */
 char **malloc_ptr(infos_t *infos)
 {
-	int size_ptr = (infos->nb_args + 2) * sizeof(char*);
-	int size =  (S_BINARY + infos->nb_args * S_NB) * sizeof(char) + size_ptr;
+	const int size_ptr = (infos->nb_args + 2) * sizeof(char*);
+	const int size = (S_BIN + infos->nb_args * S_NB) * sizeof(char) + size_ptr;
 	void *ptr;
 
 	if (!(ptr = malloc(size))) {

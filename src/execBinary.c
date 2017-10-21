@@ -5,7 +5,7 @@
 ** Login   <alexandre@epitech.net>
 **
 ** Started on  Thu Oct 19 00:01:38 2017 alexandre Chamard-bois
-** Last update Sat Oct 21 11:05:10 2017 alexandre Chamard-bois
+** Last update Sat Oct 21 16:54:17 2017 alexandre Chamard-bois
 */
 
 #include <unistd.h>
@@ -17,20 +17,21 @@
 
 static void 	read_fd(int fd)
 {
-	char buffer[100 + 1] = "";
+	char buffer[BUFF_SIZE + 1] = "";
 	char *ptr;
 	char *token;
 
-	while (read(fd, buffer, 100) > 0) {
+	while (read(fd, buffer, BUFF_SIZE) > 0) {
 		for (ptr = buffer; ; ptr = NULL) {
 			token = strtok(ptr, " ");
 			if (!token) {
 				break;
 			}
-			printf("%s\n", token);
+			printf("%s ", token);
 		}
-		memset(buffer, 0, 100);
+		memset(buffer, 0, BUFF_SIZE);
 	}
+	printf("\n");
 }
 
 int		exec_binary(char **av)
@@ -65,7 +66,7 @@ int		exec_binary(char **av)
 
 int exec_series(list_t *series)
 {
-	char **tab = NULL;
+	char **tab;
 
 	while (series) {
 		if (!(tab = malloc_ptr(&series->infos))) {

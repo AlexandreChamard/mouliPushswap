@@ -10,7 +10,7 @@
 
 CC		=	gcc
 
-CFLAGS		=	-W -Wall -Wextra -Werror -g
+CFLAGS		=	-W -Wall -Wextra -Werror
 CFLAGS		+=	-I./include
 
 SRC		=	src/main.c			\
@@ -19,6 +19,10 @@ SRC		=	src/main.c			\
 			src/parsing.c			\
 			src/randomGen.c			\
 			src/series.c			\
+			src/solver/list.c		\
+			src/solver/read_commands.c	\
+			src/solver/call_commands.c	\
+			src/solver/exec_commands2.c	\
 
 OBJ		=	$(SRC:.c=.o)
 

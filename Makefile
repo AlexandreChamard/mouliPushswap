@@ -15,9 +15,10 @@ CFLAGS		+=	-I./include
 
 SRC		=	src/main.c			\
 			src/help.c			\
-			src/execBinary.c	\
-			src/arg.c			\
-			src/randomGen.c		\
+			src/execBinary.c		\
+			src/parsing.c			\
+			src/randomGen.c			\
+			src/series.c			\
 
 OBJ		=	$(SRC:.c=.o)
 
@@ -35,6 +36,3 @@ fclean		:	clean
 			rm -f $(NAME)
 
 re		:	fclean all
-
-test    :   $(NAME)
-			cp $(NAME) Pushswap/$(NAME)

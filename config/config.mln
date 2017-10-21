@@ -2,7 +2,7 @@
 #    DEFAULT VALUES    #
 ########################
 # MIN       = -50.000  #
-# MAX       =  49.999  #
+# MAX       =  50.000  #
 # SEED      =    TIME  #
 # CALLS     =      10  #
 # MAX_SERIE = 100.000  #
@@ -12,14 +12,6 @@
 #max:       1000
 seed:       123456789
 
-serie: 1 {
-
-}
-
-serie: 2 {
-
-}
-
-serie: 100, 500, 1000 {
+serie: 100, 500 {
 
 }

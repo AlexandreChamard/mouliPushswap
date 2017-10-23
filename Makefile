@@ -22,7 +22,7 @@ SRC		=	src/main.c			\
 			src/solver/list.c		\
 			src/solver/read_commands.c	\
 			src/solver/call_commands.c	\
-			src/solver/exec_commands2.c	\
+			src/solver/exec_commands.c	\
 
 OBJ		=	$(SRC:.c=.o)
 

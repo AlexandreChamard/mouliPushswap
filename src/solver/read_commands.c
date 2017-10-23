@@ -5,27 +5,28 @@
 ** Login   <alexandre@epitech.net>
 **
 ** Started on  Sat Oct 21 16:39:57 2017 alexandre Chamard-bois
-** Last update Sat Oct 21 23:40:42 2017 alexandre Chamard-bois
+** Last update Mon Oct 23 11:24:07 2017 alexandre Chamard-bois
 */
 
 #include <ctype.h>
 #include <unistd.h>
+#include <stdio.h>
 #include <string.h>
 #include "solver.h"
 #include "mouli.h"
 
 static const command_t g_commands[NB_CMD] = {
-	{"sa", 1, command_s},
-	{"sb", 2, command_s},
-	{"sc", 3, command_s},
-	{"ra", 1, command_r},
-	{"rb", 2, command_r},
-	{"rc", 3, command_r},
-	{"rra", 1, command_rr},
-	{"rrb", 2, command_rr},
-	{"rrc", 3, command_rr},
-	{"pa", 1, command_p},
-	{"pb", 2, command_p}
+	{"sa", 0b01, command_s},
+	{"sb", 0b10, command_s},
+	{"sc", 0b11, command_s},
+	{"ra", 0b01, command_r},
+	{"rb", 0b10, command_r},
+	{"rc", 0b11, command_r},
+	{"rra", 0b01, command_rr},
+	{"rrb", 0b10, command_rr},
+	{"rrc", 0b11, command_rr},
+	{"pa", 0b01, command_p},
+	{"pb", 0b10, command_p}
 };
 
 static int cmp_command(char const *s1, char const *s2)
@@ -34,13 +35,13 @@ static int cmp_command(char const *s1, char const *s2)
 		s1++;
 		s2++;
 	}
-	if (isblank(*s1)) {
+	if (isblank(*s1) || *s1 == '\n') {
 		return (0);
 	}
 	return (*s2 - *s1);
 }
 
-int find_cmd(char const *cmd, array_t *arrays[2])
+static int find_cmd(char const *cmd, array_t *arrays[2])
 {
 	for (int i = 0; i < NB_CMD; i++) {
 		if (!cmp_command(cmd, g_commands[i].command)) {
@@ -51,9 +52,9 @@ int find_cmd(char const *cmd, array_t *arrays[2])
 	return (-1);
 }
 
-void fill_save(char *buff, char *save, char *concat_buff)
+static void fill_save(char *buff, char *save, char *concat_buff)
 {
-	char	new_save[4] = "";
+	char	new_save[5] = "";
 	int 	i;
 
 	if (!isblank(buff[BUFF_SIZE]) && buff[BUFF_SIZE] != '\n') {
@@ -69,10 +70,9 @@ void fill_save(char *buff, char *save, char *concat_buff)
 }
 
 /* buff[BUFF_SIZE + 1] */
-/* ne pas oublier de rappeller la fonction pour flush la dernière save */
-int exec_buff(char *buff, array_t *arrays[2])
+static int exec_buff(char *buff, array_t *arrays[2])
 {
-	static char	save_buff[4] = "";
+	static char	save_buff[5] = "";
 	char		concat_buff[BUFF_SIZE + 5] = "";
 	size_t i = 0;
 	int ret;
@@ -81,28 +81,29 @@ int exec_buff(char *buff, array_t *arrays[2])
 	while (concat_buff[i]) {
 		ret = find_cmd(concat_buff + i, arrays);
 		if (ret == -1) {
-			return (-1);
+			printf("command not find: %s\n", concat_buff + i);
+			return (1);
 		}
 		if (concat_buff[i + ret] == '\n') {
-			return (1);
+			return (0);
 		}
 		i += ret + 1;
 	}
 	return (0);
 }
 
-int read_commands(int fd, char **tab)
+int read_commands(int fd, array_t *arrays[2])
 {
 	char buff[BUFF_SIZE + 1] = "";
-	array_t *arrays[2] = {NULL, NULL};
+	int error = 0;
 
-	(void) tab;
-	/* initie les arrays */
 	while (read(fd, buff, BUFF_SIZE) > 0) {
-		exec_buff(buff, arrays);
+		error = exec_buff(buff, arrays);
+		if (error) {
+			break;
+		}
 		memset(buff, 0, BUFF_SIZE);
 	}
-	memset(buff, 0, BUFF_SIZE);
 	exec_buff(buff, arrays);
-	return (0);
+	return (error);
 }

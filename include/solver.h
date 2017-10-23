@@ -5,7 +5,7 @@
 ** Login   <alexandre@epitech.net>
 **
 ** Started on  Sat Oct 21 16:17:32 2017 alexandre Chamard-bois
-** Last update Sat Oct 21 23:00:45 2017 alexandre Chamard-bois
+** Last update Mon Oct 23 11:43:57 2017 alexandre Chamard-bois
 */
 
 #ifndef SOLVER_H_
@@ -19,10 +19,10 @@ typedef struct array {
 	struct array 	*next;
 }	array_t;
 
-void swap_array(array_t *array);
-void rotate_array(array_t **array);
-void rev_rotate_array(array_t **array);
-void push_array(array_t **dest, array_t **source);
+void	swap_array(array_t *array);
+void	rotate_array(array_t **array);
+void	rev_rotate_array(array_t **array);
+void	push_array(array_t **dest, array_t **source);
 
 typedef struct command {
 	char	*command;
@@ -30,12 +30,17 @@ typedef struct command {
 	void	(*func)(int, array_t *arrays[2]);
 }	command_t;
 
-void command_s(int who, array_t *arrays[2]);
-void command_r(int who, array_t *arrays[2]);
-void command_rr(int who, array_t *arrays[2]);
-void command_p(int who, array_t *arrays[2]);
+void	command_s(int who, array_t *arrays[2]);
+void	command_r(int who, array_t *arrays[2]);
+void	command_rr(int who, array_t *arrays[2]);
+void	command_p(int who, array_t *arrays[2]);
 
-int exec_buff(char *buff, array_t *arrays[2]);
+/* LIST */
+void	free_list(array_t *array);
+void	print_array(array_t *array);
+
+int 	read_commands(int fd, array_t *arrays[2]);
+
 
 /*
 	sa	swap a & a + 1

@@ -5,7 +5,7 @@
 ** Login   <alexandre@epitech.net>
 **
 ** Started on  Wed Oct 18 22:57:25 2017 alexandre Chamard-bois
-** Last update Sat Oct 21 23:38:17 2017 alexandre Chamard-bois
+** Last update Mon Oct 23 11:25:11 2017 alexandre Chamard-bois
 */
 
 #ifndef MOULI_H_
@@ -36,7 +36,7 @@ void	print_help(int ac, char **av);
 /*  EXEC_BINARY*/
 int	exec_binary(char **av);
 int	exec_series(list_t *series);
-int 	read_commands(int fd, char **tab);
+int	verif_output(int fd, char **tab);
 
 /* ARG */
 list_t	*pars_file(char const *file);

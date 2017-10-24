@@ -5,7 +5,7 @@
 ** Login   <alexandre@epitech.net>
 **
 ** Started on  Sun Oct 22 21:15:54 2017 alexandre Chamard-bois
-** Last update Mon Oct 23 12:12:00 2017 alexandre Chamard-bois
+** Last update Tue Oct 24 23:50:49 2017 alexandre Chamard-bois
 */
 
 #include <stdlib.h>
@@ -83,15 +83,8 @@ int verif_output(int fd, char **tab)
 	if (!(arrays[0] = init_arrays(tab))) {
 		return (1);
 	}
-	printf("start:\n");
-	print_array(arrays[0]);
-
 	ret = read_commands(fd, arrays);
-	printf("error: %d\n", ret);
-	printf("array[0]:\n");
-	print_array(arrays[0]);
-	printf("array[1]:\n");
-	print_array(arrays[1]);
-	printf("\n");
-	return (0);
+	free_list(arrays[0]);
+	free_list(arrays[1]);
+	return (ret);
 }

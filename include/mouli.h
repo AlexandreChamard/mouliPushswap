@@ -5,7 +5,7 @@
 ** Login   <alexandre@epitech.net>
 **
 ** Started on  Wed Oct 18 22:57:25 2017 alexandre Chamard-bois
-** Last update Mon Oct 23 11:25:11 2017 alexandre Chamard-bois
+** Last update Tue Oct 24 23:29:47 2017 alexandre Chamard-bois
 */
 
 #ifndef MOULI_H_
@@ -13,7 +13,7 @@
 
 # define BUFF_SIZE	1024
 
-# define RAND(infos)	(rand() % (infos->max - infos->min) - infos->min)
+# define RAND(infos)	(rand() % (infos->max - infos->min + 1) + infos->min)
 # define MIN(x, y)	((x) < (y) ? (x) : (y))
 # define MAX(x, y)	((x) > (y) ? (x) : (y))
 

@@ -5,33 +5,37 @@
 ** Login   <alexandre@epitech.net>
 **
 ** Started on  Sat Oct 21 16:26:45 2017 alexandre Chamard-bois
-** Last update Sat Oct 21 22:51:53 2017 alexandre Chamard-bois
+** Last update Sun Oct 29 16:56:24 2017 alexandre Chamard-bois
 */
 
 #include <stdio.h>
 #include "solver.h"
 
-void swap_array(array_t *array)
+int swap_array(array_t *array)
 {
 	(void) array;
 	printf("swap !\n");
+	return (0);
 }
 
-void rotate_array(array_t **array)
+int rotate_array(array_t **array)
 {
 	(void) array;
 	printf("rotate !\n");
+	return (0);
 }
 
-void rev_rotate_array(array_t **array)
+int rev_rotate_array(array_t **array)
 {
 	(void) array;
 	printf("reverse rotate !\n");
+	return (0);
 }
 
-void push_array(array_t **dest, array_t **source)
+int push_array(array_t **dest, array_t **source)
 {
 	(void) dest;
 	(void) source;
 	printf("push !\n");
+	return (0);
 }

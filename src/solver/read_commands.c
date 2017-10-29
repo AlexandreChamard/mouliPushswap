@@ -5,7 +5,7 @@
 ** Login   <alexandre@epitech.net>
 **
 ** Started on  Sat Oct 21 16:39:57 2017 alexandre Chamard-bois
-** Last update Tue Oct 24 23:33:54 2017 alexandre Chamard-bois
+** Last update Sun Oct 29 17:52:31 2017 alexandre Chamard-bois
 */
 
 #include <ctype.h>
@@ -41,14 +41,18 @@ static int cmp_command(char const *s1, char const *s2)
 	return (*s2 - *s1);
 }
 
-static int find_cmd(char const *cmd, array_t *arrays[2])
+static int find_cmd(char const *cmd, array_t *arrays[2], stats_t *stats)
 {
 	for (int i = 0; i < NB_CMD; i++) {
 		if (!cmp_command(cmd, g_commands[i].command)) {
-			g_commands[i].func(g_commands[i].who, arrays);
+			if (g_commands[i].func(g_commands[i].who, arrays)) {
+				stats->error = CMD_EXEC;
+			}
 			return (strlen(g_commands[i].command));
 		}
 	}
+	printf("[%s]\n", cmd);
+	stats->error = BAD_CMD;
 	return (-1);
 }
 
@@ -70,18 +74,16 @@ static void fill_save(char *buff, char *save, char *concat_buff)
 }
 
 /* buff[BUFF_SIZE + 1] */
-static int exec_buff(char *buff, array_t *arrays[2])
+static int exec_buff(char *buff, char *save_buff, array_t *arrays[2], stats_t *stats)
 {
-	static char	save_buff[5] = "";
 	char		concat_buff[BUFF_SIZE + 5] = "";
-	size_t i = 0;
-	int ret;
+	size_t		i = 0;
+	int		ret;
 
 	fill_save(buff, save_buff, concat_buff);
 	while (concat_buff[i]) {
-		ret = find_cmd(concat_buff + i, arrays);
+		ret = find_cmd(concat_buff + i, arrays, stats);
 		if (ret == -1) {
-			printf("command not find: %s\n", concat_buff + i);
 			return (1);
 		}
 		if (concat_buff[i + ret] == '\n') {
@@ -92,18 +94,19 @@ static int exec_buff(char *buff, array_t *arrays[2])
 	return (0);
 }
 
-int read_commands(int fd, array_t *arrays[2])
+int read_commands(int fd, array_t *arrays[2], stats_t *stats)
 {
+	char save_buff[5] = "";
 	char buff[BUFF_SIZE + 1] = "";
-	int error = 0;
 
 	while (read(fd, buff, BUFF_SIZE) > 0) {
-		error = exec_buff(buff, arrays);
-		if (error) {
-			break;
+		if (exec_buff(buff, save_buff, arrays, stats)) {
+			return (1);
 		}
 		memset(buff, 0, BUFF_SIZE);
 	}
-	exec_buff(buff, arrays);
-	return (error);
+	if (exec_buff(buff, save_buff, arrays, stats)) {
+		return (1);
+	}
+	return (0);
 }

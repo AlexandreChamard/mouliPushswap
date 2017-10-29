@@ -5,12 +5,13 @@
 ** Login   <alexandre@epitech.net>
 **
 ** Started on  Sun Oct 22 21:15:54 2017 alexandre Chamard-bois
-** Last update Tue Oct 24 23:50:49 2017 alexandre Chamard-bois
+** Last update Sun Oct 29 17:30:30 2017 alexandre Chamard-bois
 */
 
 #include <stdlib.h>
 #include <stdio.h>
 #include "solver.h"
+#include "stats.h"
 
 void free_list(array_t *array)
 {
@@ -75,7 +76,7 @@ void print_array(array_t *array)
 	printf("\n");
 }
 
-int verif_output(int fd, char **tab)
+int verif_output(int fd, char **tab, stats_t *stats)
 {
 	array_t *arrays[2] = {NULL, NULL};
 	int ret;
@@ -83,7 +84,9 @@ int verif_output(int fd, char **tab)
 	if (!(arrays[0] = init_arrays(tab))) {
 		return (1);
 	}
-	ret = read_commands(fd, arrays);
+	gettimeofday(&stats->start_time, NULL);
+	ret = read_commands(fd, arrays, stats);
+	gettimeofday(&stats->end_time, NULL);
 	free_list(arrays[0]);
 	free_list(arrays[1]);
 	return (ret);

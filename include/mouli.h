@@ -5,11 +5,13 @@
 ** Login   <alexandre@epitech.net>
 **
 ** Started on  Wed Oct 18 22:57:25 2017 alexandre Chamard-bois
-** Last update Tue Oct 24 23:29:47 2017 alexandre Chamard-bois
+** Last update Sun Oct 29 16:38:28 2017 alexandre Chamard-bois
 */
 
 #ifndef MOULI_H_
 # define MOULI_H_
+
+# include "stats.h"
 
 # define BUFF_SIZE	1024
 
@@ -34,9 +36,8 @@ typedef struct list {
 void	print_help(int ac, char **av);
 
 /*  EXEC_BINARY*/
-int	exec_binary(char **av);
 int	exec_series(list_t *series);
-int	verif_output(int fd, char **tab);
+int	verif_output(int fd, char **tab, stats_t *stats);
 
 /* ARG */
 list_t	*pars_file(char const *file);

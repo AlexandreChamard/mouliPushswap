@@ -5,16 +5,16 @@
 ** Login   <alexandre@epitech.net>
 **
 ** Started on  Thu Oct 19 00:01:38 2017 alexandre Chamard-bois
-** Last update Tue Oct 24 23:52:16 2017 alexandre Chamard-bois
+** Last update Sun Oct 29 18:05:26 2017 alexandre Chamard-bois
 */
 
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/wait.h>
-#include <sys/time.h>
 #include <stdlib.h>
 #include "mouli.h"
+#include "stats.h"
 
 static void exec_child(int fds[2], char **tab)
 {
@@ -25,29 +25,28 @@ static void exec_child(int fds[2], char **tab)
 	exit(1);
 }
 
-float timedifference_msec(struct timeval t0, struct timeval t1)
-{
-    return (t1.tv_sec - t0.tv_sec) * 1000.0f + (t1.tv_usec - t0.tv_usec) / 1000.0f;
-}
-
-static int exec_father(int fds[2], int pid, char **tab)
+static int exec_father(int fds[2], int pid, char **tab, stats_t *stats)
 {
 	int status = 0;
-	struct timeval stop, start;
 
-	gettimeofday(&start, NULL);
+	usleep(stats->size);
 	close(fds[1]);
 	dup2(fds[0], STDIN_FILENO);
-	verif_output(fds[0], tab);
+	verif_output(fds[0], tab, stats);
 	waitpid(pid, &status, 0);
-	gettimeofday(&stop, NULL);
-
-	printf("ended with status: %d in %f ms.\n", status, timedifference_msec(start, stop));
 	close(fds[0]);
+	if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGFPE) {
+			stats->error = FLOATING;
+		} else if (WTERMSIG(status) == SIGSEGV) {
+			stats->error = SEGFAULT;
+		}
+	}
 	return (status);
 }
 
-int		exec_binary(char **tab)
+int		exec_binary(char **tab, stats_t *stats)
 {
 	int	status = 0;
 	int     fds[2];
@@ -64,24 +63,39 @@ int		exec_binary(char **tab)
 	if (!pid) {
 		exec_child(fds, tab);
 	} else {
-		status = exec_father(fds, pid, tab);
+		status = exec_father(fds, pid, tab, stats);
 	}
 	return (status);
 }
 
 int exec_series(list_t *series)
 {
-	char **tab;
+	char	**tab;
+	stats_t	stats;
 
 	while (series) {
+		memset(&stats, 0, sizeof(stats_t));
 		if (!(tab = malloc_ptr(&series->infos))) {
 			return (1);
 		}
-		for (unsigned int i = 0; i < series->infos.calls; i++) {
+		stats.nb_loop = series->infos.calls;
+		stats.size = series->infos.nb_args;
+		for (unsigned int i = 0; i < stats.nb_loop; i++) {
+			stats.error = NONE;
 			fill_tab(tab, &series->infos);
-			exec_binary(tab);
+			exec_binary(tab, &stats);
+			stats.total_time +=
+			timedifference_msec(&stats.start_time, &stats.end_time);
+			if (stats.error) {
+				printf("error: %d\n", stats.error);
+				stats.failed++;
+			} else {
+				stats.done++;
+			}
+			printf("%d\n", i);
 		}
 		free(tab);
+		print_result(&stats);
 		series = free_serie(series);
 	}
 	return (0);

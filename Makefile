@@ -23,6 +23,10 @@ SRC		=	src/main.c			\
 			src/solver/read_commands.c	\
 			src/solver/call_commands.c	\
 			src/solver/exec_commands.c	\
+			src/stats/error.c		\
+			src/stats/time.c		\
+			src/stats/exec.c		\
+			src/stats/print.c		\
 
 OBJ		=	$(SRC:.c=.o)
 

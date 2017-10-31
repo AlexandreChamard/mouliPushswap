@@ -5,7 +5,7 @@
 ** Login   <alexandre@epitech.net>
 **
 ** Started on  Sat Oct 21 16:39:57 2017 alexandre Chamard-bois
-** Last update Sun Oct 29 17:52:31 2017 alexandre Chamard-bois
+** Last update Tue Oct 31 21:52:19 2017 alexandre Chamard-bois
 */
 
 #include <ctype.h>
@@ -41,7 +41,7 @@ static int cmp_command(char const *s1, char const *s2)
 	return (*s2 - *s1);
 }
 
-static int find_cmd(char const *cmd, array_t *arrays[2], stats_t *stats)
+static int find_cmd(char const *cmd, array_t *arrays[2], stats_t *stats, int nb_loop)
 {
 	for (int i = 0; i < NB_CMD; i++) {
 		if (!cmp_command(cmd, g_commands[i].command)) {
@@ -51,7 +51,7 @@ static int find_cmd(char const *cmd, array_t *arrays[2], stats_t *stats)
 			return (strlen(g_commands[i].command));
 		}
 	}
-	printf("[%s]\n", cmd);
+	printf("loop: %d\t[%s]\n", nb_loop, cmd);
 	stats->error = BAD_CMD;
 	return (-1);
 }
@@ -59,10 +59,12 @@ static int find_cmd(char const *cmd, array_t *arrays[2], stats_t *stats)
 static void fill_save(char *buff, char *save, char *concat_buff)
 {
 	char	new_save[5] = "";
+	int	buff_size = strlen(buff) - 1;
 	int 	i;
 
-	if (!isblank(buff[BUFF_SIZE]) && buff[BUFF_SIZE] != '\n') {
-		for (i = BUFF_SIZE; i >= 0 && !isblank(buff[i]); i--);
+	// printf("buffer: [%s]\n", buff);
+	if (!isblank(buff[buff_size]) && buff[buff_size] != '\n') {
+		for (i = buff_size; i >= 0 && !isblank(buff[i]); i--);
 		if (i >= 0) {
 			buff[i] = 0;
 			strncpy(new_save, buff + i + 1, 4);
@@ -70,19 +72,23 @@ static void fill_save(char *buff, char *save, char *concat_buff)
 	}
 	strcpy(concat_buff, save);
 	strcpy(concat_buff + strlen(save), buff);
+	// printf("old_save: [%s]\n", save);
+	// printf("concat: [%s]\n", concat_buff);
+	// printf("new_save: [%s]\n", new_save);
 	memcpy(save, new_save, 4);
 }
 
 /* buff[BUFF_SIZE + 1] */
-static int exec_buff(char *buff, char *save_buff, array_t *arrays[2], stats_t *stats)
+static int exec_buff(char *buff, char *save_buff, array_t *arrays[2], stats_t *stats, int nb_loop)
 {
 	char		concat_buff[BUFF_SIZE + 5] = "";
-	size_t		i = 0;
+	size_t		i;
 	int		ret;
 
 	fill_save(buff, save_buff, concat_buff);
+	 i = isblank(*concat_buff);
 	while (concat_buff[i]) {
-		ret = find_cmd(concat_buff + i, arrays, stats);
+		ret = find_cmd(concat_buff + i, arrays, stats, nb_loop);
 		if (ret == -1) {
 			return (1);
 		}
@@ -97,15 +103,17 @@ static int exec_buff(char *buff, char *save_buff, array_t *arrays[2], stats_t *s
 int read_commands(int fd, array_t *arrays[2], stats_t *stats)
 {
 	char save_buff[5] = "";
+	int i = 0;
 	char buff[BUFF_SIZE + 1] = "";
 
 	while (read(fd, buff, BUFF_SIZE) > 0) {
-		if (exec_buff(buff, save_buff, arrays, stats)) {
+		if (exec_buff(buff, save_buff, arrays, stats, i)) {
 			return (1);
 		}
 		memset(buff, 0, BUFF_SIZE);
+		i++;
 	}
-	if (exec_buff(buff, save_buff, arrays, stats)) {
+	if (exec_buff(buff, save_buff, arrays, stats, i)) {
 		return (1);
 	}
 	return (0);

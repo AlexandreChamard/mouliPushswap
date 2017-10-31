@@ -5,7 +5,7 @@
 ** Login   <alexandre@epitech.net>
 **
 ** Started on  Sat Oct 21 16:39:57 2017 alexandre Chamard-bois
-** Last update Tue Oct 31 21:52:19 2017 alexandre Chamard-bois
+** Last update Tue Oct 31 21:54:02 2017 alexandre Chamard-bois
 */
 
 #include <ctype.h>
@@ -51,7 +51,6 @@ static int find_cmd(char const *cmd, array_t *arrays[2], stats_t *stats, int nb_
 			return (strlen(g_commands[i].command));
 		}
 	}
-	printf("loop: %d\t[%s]\n", nb_loop, cmd);
 	stats->error = BAD_CMD;
 	return (-1);
 }
@@ -62,7 +61,6 @@ static void fill_save(char *buff, char *save, char *concat_buff)
 	int	buff_size = strlen(buff) - 1;
 	int 	i;
 
-	// printf("buffer: [%s]\n", buff);
 	if (!isblank(buff[buff_size]) && buff[buff_size] != '\n') {
 		for (i = buff_size; i >= 0 && !isblank(buff[i]); i--);
 		if (i >= 0) {
@@ -72,9 +70,6 @@ static void fill_save(char *buff, char *save, char *concat_buff)
 	}
 	strcpy(concat_buff, save);
 	strcpy(concat_buff + strlen(save), buff);
-	// printf("old_save: [%s]\n", save);
-	// printf("concat: [%s]\n", concat_buff);
-	// printf("new_save: [%s]\n", new_save);
 	memcpy(save, new_save, 4);
 }
 

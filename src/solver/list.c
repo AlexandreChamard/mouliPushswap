@@ -5,7 +5,7 @@
 ** Login   <alexandre@epitech.net>
 **
 ** Started on  Sun Oct 22 21:15:54 2017 alexandre Chamard-bois
-** Last update Sun Oct 29 17:30:30 2017 alexandre Chamard-bois
+** Last update Wed Nov 15 19:31:08 2017 alexandre Chamard-bois
 */
 
 #include <stdlib.h>
@@ -86,6 +86,9 @@ int verif_output(int fd, char **tab, stats_t *stats)
 	}
 	gettimeofday(&stats->start_time, NULL);
 	ret = read_commands(fd, arrays, stats);
+	if (!ret) {
+		ret = verif_result(stats, arrays);
+	}
 	gettimeofday(&stats->end_time, NULL);
 	free_list(arrays[0]);
 	free_list(arrays[1]);

@@ -20,6 +20,7 @@ SRC		=	src/main.c			\
 			src/randomGen.c			\
 			src/series.c			\
 			src/solver/list.c		\
+			src/solver/verif.c		\
 			src/solver/read_commands.c	\
 			src/solver/call_commands.c	\
 			src/solver/exec_commands.c	\

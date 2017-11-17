@@ -5,7 +5,7 @@
 ** Login   <alexandre@epitech.net>
 **
 ** Started on  Thu Oct 19 22:00:31 2017 alexandre Chamard-bois
-** Last update Sat Oct 21 10:51:45 2017 alexandre Chamard-bois
+** Last update Fri Nov 17 12:05:29 2017 alexandre Chamard-bois
 */
 
 #include <string.h>
@@ -47,6 +47,9 @@ static int get_args(FILE *fp, infos_t *infos)
 		sscanf(line, "max: %d", &infos->max);
 		sscanf(line, "calls: %u", &infos->calls);
 		sscanf(line, "seed: %u", &infos->seed);
+		sscanf(line, "verbose: %d", &infos->verbose);
+		sscanf(line, "debug: %d", &infos->debug);
+		sscanf(line, "timeout: %d", &infos->timeout);
 		if (strstr(line, "}")) {
 			break;
 		}
@@ -57,8 +60,7 @@ static int get_args(FILE *fp, infos_t *infos)
 	return ((read <= 0));
 }
 
-static list_t *
-new_serie(list_t *list, FILE *fp, infos_t *def_infos, char const *line)
+static list_t *new_serie(list_t *list, FILE *fp, infos_t *def_infos, char const *line)
 {
 	infos_t	infos;
 	list_t	*new_serie;
@@ -77,7 +79,11 @@ new_serie(list_t *list, FILE *fp, infos_t *def_infos, char const *line)
 		}
 		memcpy(&new_serie->infos, &infos, sizeof(infos_t));
 		new_serie->infos.nb_args = atoi(line + i + 1);
-		new_serie->next = list;
+		new_serie->prev = list;
+		if (list) {
+			list->next = new_serie;
+		}
+		new_serie->next = NULL;
 		list = new_serie;
 		for (; i > 0 && !isdigit(line[i]); i--);
 	}
@@ -97,6 +103,9 @@ static list_t *recup_series(FILE *fp, infos_t *default_infos)
 		sscanf(line, "max: %d", &default_infos->max);
 		sscanf(line, "calls: %u", &default_infos->calls);
 		sscanf(line, "seed: %u", &default_infos->seed);
+		sscanf(line, "verbose: %d", &default_infos->verbose);
+		sscanf(line, "debug: %d", &default_infos->debug);
+		sscanf(line, "timeout: %d", &default_infos->timeout);
 		if (strstr(line, "serie:")) {
 			list = new_serie(list, fp, default_infos, line);
 		}
@@ -109,7 +118,7 @@ static list_t *recup_series(FILE *fp, infos_t *default_infos)
 
 list_t *pars_file(char const *file)
 {
-	infos_t	default_infos = {-50000, 50000, 0, 10, time(NULL)};
+	infos_t	default_infos = {-50000, 50000, 0, 10, time(NULL), 0, 0, 10};
 	list_t	*series;
 	FILE	*fp;
 
@@ -120,9 +129,15 @@ list_t *pars_file(char const *file)
 	series = recup_series(fp, &default_infos);
 	for (list_t *ptr = series; ptr; ptr = ptr->next) {
 		ptr->infos.min = MAX(-50000, ptr->infos.min);
-		ptr->infos.max = MIN(ptr->infos.max, 49999);
+		ptr->infos.max = MIN(ptr->infos.max, 50000);
+		ptr->infos.max = MAX(ptr->infos.min, ptr->infos.max);
 		ptr->infos.nb_args = MIN(ptr->infos.nb_args, 100000);
 	}
 	fclose(fp);
+	if (series) {
+		while (series->prev) {
+			series = series->prev;
+		}
+	}
 	return (series);
 }

@@ -5,12 +5,11 @@
 ** Login   <alexandre@epitech.net>
 **
 ** Started on  Thu Oct 19 15:09:54 2017 alexandre Chamard-bois
-** Last update Tue Oct 24 23:28:46 2017 alexandre Chamard-bois
+** Last update Sat Nov 11 11:23:53 2017 alexandre Chamard-bois
 */
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <time.h>
 #include <string.h>
 #include "mouli.h"
 

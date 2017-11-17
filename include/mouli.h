@@ -5,7 +5,7 @@
 ** Login   <alexandre@epitech.net>
 **
 ** Started on  Wed Oct 18 22:57:25 2017 alexandre Chamard-bois
-** Last update Tue Oct 31 21:49:43 2017 alexandre Chamard-bois
+** Last update Fri Nov 17 11:47:37 2017 alexandre Chamard-bois
 */
 
 #ifndef MOULI_H_
@@ -25,10 +25,14 @@ typedef struct infos {
 	unsigned int	nb_args; // 0
 	unsigned int	calls; // 10
 	unsigned int	seed; // TIME
+	int		verbose;
+	int		debug;
+	int		timeout;
 }	infos_t;
 
 typedef struct list {
 	infos_t     infos;
+	struct list *prev;
 	struct list *next;
 }	list_t;
 
@@ -49,5 +53,7 @@ void	fill_tab(char **tab, infos_t *infos);
 /* SERIES */
 void	print_serie(list_t *serie);
 list_t	*free_serie(list_t *serie);
+
+void print_info_serie(list_t *serie);
 
 #endif

@@ -1,0 +1,29 @@
+########################
+#    DEFAULT VALUES    #
+########################
+# MIN       = -50.000  #
+# MAX       =  50.000  #
+# SEED      =    TIME  #
+# CALLS     =      10  #
+# MAX_SERIE = 100.000  #
+# VERBOSE   = output   #
+# DEBUG     = pas à pas#
+########################
+
+# seed:		123456789
+max:		0
+
+serie: 100 {
+	calls: 100
+	min:		-1
+	max:		-1
+}
+
+serie: 10, 2 {
+	calls: 2
+	verbose: 	1
+}
+
+serie: 100 {
+	calls: 2
+}

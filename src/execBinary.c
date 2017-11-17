@@ -5,7 +5,7 @@
 ** Login   <alexandre@epitech.net>
 **
 ** Started on  Thu Oct 19 00:01:38 2017 alexandre Chamard-bois
-** Last update Tue Oct 31 21:38:56 2017 alexandre Chamard-bois
+** Last update Fri Nov 17 11:48:34 2017 alexandre Chamard-bois
 */
 
 #include <unistd.h>
@@ -33,16 +33,20 @@ static int exec_father(int fds[2], int pid, char **tab, stats_t *stats)
 	close(fds[1]);
 	dup2(fds[0], STDIN_FILENO);
 	verif_output(fds[0], tab, stats);
-	waitpid(pid, &status, 0);
-	close(fds[0]);
-	if (WIFSIGNALED(status))
-	{
-		if (WTERMSIG(status) == SIGFPE) {
-			stats->error = FLOATING;
-		} else if (WTERMSIG(status) == SIGSEGV) {
-			stats->error = SEGFAULT;
+	if (stats->timeout) {
+		kill(pid, SIGQUIT);
+	} else {
+		waitpid(pid, &status, 0);
+		if (WIFSIGNALED(status))
+		{
+			if (WTERMSIG(status) == SIGFPE) {
+				stats->error = FLOATING;
+			} else if (WTERMSIG(status) == SIGSEGV) {
+				stats->error = SEGFAULT;
+			}
 		}
 	}
+	close(fds[0]);
 	return (status);
 }
 
@@ -80,6 +84,10 @@ int exec_series(list_t *series)
 		}
 		stats.nb_loop = series->infos.calls;
 		stats.size = series->infos.nb_args;
+		stats.verbose = series->infos.verbose;
+		stats.debug = series->infos.debug;
+		stats.time_max = series->infos.timeout;
+		print_info_serie(series);
 		for (unsigned int i = 0; i < stats.nb_loop; i++) {
 			stats.error = NONE;
 			fill_tab(tab, &series->infos);
@@ -87,12 +95,15 @@ int exec_series(list_t *series)
 			stats.total_time +=
 			timedifference_msec(&stats.start_time, &stats.end_time);
 			if (stats.error) {
-				printf("error: %d\n", stats.error);
+				print_error(&stats);
+				printf("\n");
 				stats.failed++;
+				if (stats.timeout) {
+					break;
+				}
 			} else {
 				stats.done++;
 			}
-			printf("%d\n", i);
 		}
 		free(tab);
 		print_result(&stats);

@@ -1,0 +1,7 @@
+serie: 5 {
+	calls: 1
+	debug: 1
+	verbose: 1
+	min: 0
+	max: 10
+}
